@@ -69,15 +69,7 @@ def start_screen():
                 return
 
 
-def settings():
-    global fon
-    while True:
-        screen.blit(fon, (0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return
+
 
 
 def menu():
