@@ -25,15 +25,14 @@ title = pygame.image.load("data/backgrounds and titles/title.png")
 ghost_image = pygame.image.load('data/mobs/ghost/ghost-idle1.png')
 sword = pygame.transform.rotate(pygame.image.load('data/gui/sword.png'), -45)
 fon = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/background.png'), (width, height))
-fon_2 = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/background2.png'), (width, height))
 health_bar = pygame.transform.scale(pygame.image.load('data/gui/HealthBar.png'), (200, 50))
 stamina_bar = pygame.transform.scale(pygame.image.load('data/gui/staminabar.png'), (150, 15))
 middle_ground = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/middleground.png'),
                                        (width, height))
-middle_ground_2 = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/middleground2.png'),
-                                         (width, height // 2))
+
 scroll = pygame.transform.scale(pygame.image.load('data/gui/scroll.png'), (350, 400))
 conrols_image = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/cntrls.png'), (width, height))
+mesbox = pygame.image.load('data/gui/mesbox.png')
 
 hp = 10
 bg_pos = 0
@@ -109,19 +108,30 @@ def menu():
 
 
 def controls():
-    screen.blit(fon_2, (0, 0))
-    print_text('Controls', 325, 90, font_type='shrift5.ttf', font_size=75, font_color=(217, 130, 30))
-    print_text('Move: A and D', 325, 200, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
-    print_text(' Jump: SPACE', 325, 250, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
-    print_text('  Attack: E', 325, 300, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
-    print_text(' Run: SHIFT', 325, 350, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
+    global bg_pos, mg_pos
     while True:
+        clock.tick(120)
+        if bg_pos >= 900:
+            bg_pos = 0
+        elif mg_pos >= 900:
+            mg_pos = 0
+        screen.blit(fon, (bg_pos, 0))
+        screen.blit(fon, (-width + bg_pos, 0))
+        screen.blit(middle_ground, (mg_pos, 0))
+        screen.blit(middle_ground, (-width + mg_pos, 0))
+        bg_pos += 3
+        mg_pos += 1
+        screen.blit(scroll, (280, 50))
+        print_text(' Controls', 355, 90, font_type='shrift4.ttf', font_size=75, font_color=(155, 0, 0))
+        print_text('Move: A and D', 355, 180, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Jump:  SPACE', 355, 230, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Attack:   E', 355, 280, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Run:  SHIFT', 355, 330, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN or (
                     event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                load_map(menu())
                 return
         pygame.display.flip()
         clock.tick(fps)
@@ -170,6 +180,14 @@ def paused():
                 elif pos == 180:
                     return
         pygame.display.flip()
+
+
+def end_level():
+    # screen.blit(mesbox, (500, 100))
+    # print_text('Press "F" to continue', 550, 125, (255, 255, 255),
+    #   'shrift5.ttf', 25)
+
+    load_map('levels/level2.tmx')
 
 
 def load_map(filename):
@@ -262,4 +280,6 @@ while True:
     for sprite in all_sprites:
         screen.blit(sprite.image, cam.apply(sprite))
     player.draw_hp()
+    if pygame.sprite.spritecollideany(player, end_level_group) is not None:
+        end_level()
     pygame.display.flip()

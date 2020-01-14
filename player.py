@@ -53,11 +53,6 @@ health = pygame.transform.scale(pygame.image.load('data/gui/Health.png'), (150, 
 
 stamina = pygame.transform.scale(pygame.image.load('data/gui/stamina.png'), (136, 10))
 
-crouch = [pygame.image.load('data/character/crouch1.png'),
-          pygame.image.load('data/character/crouch2.png'), pygame.image.load('data/character/crouch3.png')]
-
-mesbox = pygame.image.load('data/gui/mesbox.png')
-
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -65,7 +60,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(player_group, all_sprites)
         self.image = load_image(player_image)
         self.rect = self.image.get_rect().move(pos_x, pos_y)
-        self.speed = 3
+        self.speed = 4
         self.hp = hp
         self.stamina = 150
         self.left = False
@@ -83,8 +78,8 @@ class Player(pygame.sprite.Sprite):
         self.side = 0
 
     def update(self):
-        from main import wall_group, screen, game_over, dead_line_group, stair_group, end_level_group, \
-            print_text, load_map
+        from main import wall_group, game_over, dead_line_group, stair_group
+
         self.keys = pygame.key.get_pressed()
         self.move()
         self.attack()
@@ -112,12 +107,6 @@ class Player(pygame.sprite.Sprite):
             self.hp -= 1
             self.hp_bar += 15
             self.hrt = False
-        if pygame.sprite.spritecollideany(self, end_level_group) is not None:
-            screen.blit(mesbox, (500, 100))
-            print_text('Press "F" to continue', 550, 125, (255, 255, 255),
-                       'shrift5.ttf', 25)
-            if self.keys[pygame.K_f]:
-                load_map('levels/level2.tmx')
 
     def move(self):
         from main import border_group_left, border_group_right
