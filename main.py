@@ -3,7 +3,7 @@ import pygame, sys, os
 pygame.init()
 
 fps = 60
-size = width, height = 900, 500
+size = width, height = 920, 480
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
@@ -34,9 +34,12 @@ scroll = pygame.transform.scale(pygame.image.load('data/gui/scroll.png'), (350, 
 conrols_image = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/cntrls.png'), (width, height))
 mesbox = pygame.image.load('data/gui/mesbox.png')
 
+levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx']
+
 hp = 10
 bg_pos = 0
 mg_pos = 0
+level = 0
 
 
 def terminate():
@@ -98,7 +101,7 @@ def menu():
                 pos -= 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if pos == 185:
-                    return 'levels/map2.tmx'
+                    return levels[0]
                 elif pos == 235:
                     controls()
                 elif pos == 335:
@@ -183,11 +186,10 @@ def paused():
 
 
 def end_level():
-    # screen.blit(mesbox, (500, 100))
-    # print_text('Press "F" to continue', 550, 125, (255, 255, 255),
-    #   'shrift5.ttf', 25)
+    global level
+    level += 1
 
-    load_map('levels/level2.tmx')
+    load_map(levels[level])
 
 
 def load_map(filename):
@@ -255,7 +257,7 @@ map = None
 map_img = None
 map_rect = None
 cam = None
-load_map('levels/level2.tmx')
+load_map(levels[0])
 start_screen()
 filename = menu()
 
