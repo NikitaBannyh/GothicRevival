@@ -126,9 +126,6 @@ class Ghost(pygame.sprite.Sprite):
         if pygame.sprite.collide_mask(self, player_group.sprites()[0]):
             player.get_damage()
 
-    def get_damage(self, sprite):
-        sprite.kill()
-
 
 class Slime(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -141,7 +138,6 @@ class Slime(pygame.sprite.Sprite):
         self.left = True
         self.right = False
         self.visible = False
-        self.death = False
         self.attack_count = 0
         self.health = 10
 
@@ -205,9 +201,6 @@ class Slime(pygame.sprite.Sprite):
                 player.get_damage()
                 self.attack_count = 0
 
-    def get_damage(self, sprite):
-        sprite.kill()
-
 
 class Skeleton(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -222,11 +215,11 @@ class Skeleton(pygame.sprite.Sprite):
         self.visible = False
         self.rise_count = 0
         self.health = 10
-        self.death = False
         self.death_count = 0
 
     def update(self):
         from main import player_group, wall_group, stair_group, player, dead_line_group
+
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
 
@@ -235,7 +228,6 @@ class Skeleton(pygame.sprite.Sprite):
             self.rect = self.rect.move(0, 6)
         elif pygame.sprite.spritecollideany(self, wall_group) is None and self.left is False:
             self.rect = self.rect.move(0, 6)
-
         elif pygame.sprite.spritecollideany(self, wall_group) is None and self.left is True:
             self.rect = self.rect.move(0, 6)
             self.image = pygame.transform.flip(self.image, True, False)
@@ -271,11 +263,8 @@ class Skeleton(pygame.sprite.Sprite):
                     self.idle_count += 1
                     self.right, self.left = False, False
 
-        if self.visible is False:
+        elif self.visible is False:
             self.image = skeleton_rise[0]
         if pygame.sprite.collide_mask(self, player_group.sprites()[0]) and self.idle_count in range(28, 35):
             player.get_damage()
             self.idle_count = 0
-
-    def get_damage(self, sprite):
-        sprite.kill()

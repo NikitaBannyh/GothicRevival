@@ -31,7 +31,7 @@ stamina_bar = pygame.transform.scale(pygame.image.load('data/gui/staminabar.png'
 middle_ground = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/middleground.png'),
                                        (width, height))
 middle_ground_2 = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/middleground2.png'),
-                                         (width, height))
+                                         (width, height // 2))
 scroll = pygame.transform.scale(pygame.image.load('data/gui/scroll.png'), (350, 400))
 conrols_image = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/cntrls.png'), (width, height))
 
@@ -67,9 +67,6 @@ def start_screen():
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 return
-
-
-
 
 
 def menu():
@@ -112,7 +109,7 @@ def menu():
 
 
 def controls():
-    screen.blit(conrols_image, (0, 0))
+    screen.blit(fon_2, (0, 0))
     print_text('Controls', 325, 90, font_type='shrift5.ttf', font_size=75, font_color=(217, 130, 30))
     print_text('Move: A and D', 325, 200, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
     print_text(' Jump: SPACE', 325, 250, font_type='shrift5.ttf', font_size=50, font_color=(255, 255, 255))
@@ -232,13 +229,6 @@ def load_map(filename):
             skeleton = Skeleton(tile_object.x, tile_object.y)
 
 
-def player_update():
-    player.update()
-    player.move()
-    player.jump()
-    player.attack()
-
-
 player = None
 ghost = None
 slime = None
@@ -271,5 +261,5 @@ while True:
     screen.blit(stamina_bar, (47, 30))
     for sprite in all_sprites:
         screen.blit(sprite.image, cam.apply(sprite))
-    player_update()
+    player.draw_hp()
     pygame.display.flip()

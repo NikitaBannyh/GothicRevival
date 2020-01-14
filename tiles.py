@@ -2,7 +2,6 @@ import pygame
 import pytmx
 
 
-
 class TiledMap:
     def __init__(self, filename):
         tm = pytmx.load_pygame(filename, pixelalpha=True)
@@ -29,9 +28,6 @@ class TiledMap:
 
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x, y, w, h,group):
+    def __init__(self, x, y, w, h, group):
         pygame.sprite.Sprite.__init__(self, group)
         self.rect = pygame.Rect(x, y, w, h)
-
-
-

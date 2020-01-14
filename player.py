@@ -83,11 +83,12 @@ class Player(pygame.sprite.Sprite):
         self.side = 0
 
     def update(self):
-        keys = pygame.key.get_pressed()
-        from main import wall_group, mobs_group, screen, game_over, dead_line_group, stair_group, end_level_group, \
-            print_text, border_group_left, border_group_right, potion_group, load_map
-        screen.blit(pygame.transform.chop(health, (0, 15, self.hp_bar, 15)), (48, 18))
-        screen.blit(pygame.transform.chop(stamina, (8, 15, (150 - self.stamina), 15)), (58, 33))
+        from main import wall_group, screen, game_over, dead_line_group, stair_group, end_level_group, \
+            print_text, load_map
+        self.keys = pygame.key.get_pressed()
+        self.move()
+        self.attack()
+        self.jump()
 
         if self.hp <= 0 or pygame.sprite.spritecollideany(self, dead_line_group) is not None:
             game_over()
@@ -115,17 +116,16 @@ class Player(pygame.sprite.Sprite):
             screen.blit(mesbox, (500, 100))
             print_text('Press "F" to continue', 550, 125, (255, 255, 255),
                        'shrift5.ttf', 25)
-            if keys[pygame.K_f]:
+            if self.keys[pygame.K_f]:
                 load_map('levels/level2.tmx')
 
     def move(self):
         from main import border_group_left, border_group_right
-        keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
-                                                               border_group_left) is None and self.hrt is False:
+        if self.keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
+                                                                    border_group_left) is None and self.hrt is False:
 
-            if keys[pygame.K_LSHIFT] and self.stamina > 0:
+            if self.keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
                 self.rect = self.rect.move(-self.speed - 2, 0)
             else:
@@ -136,10 +136,10 @@ class Player(pygame.sprite.Sprite):
             self.right = False
             self.side = 1
 
-        elif keys[pygame.K_d] and pygame.sprite.spritecollideany(self,
-                                                                 border_group_right) is None and self.hrt is False:
+        elif self.keys[pygame.K_d] and pygame.sprite.spritecollideany(self,
+                                                                      border_group_right) is None and self.hrt is False:
 
-            if keys[pygame.K_LSHIFT] and self.stamina > 0:
+            if self.keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
                 self.rect = self.rect.move(self.speed + 2, 0)
             else:
@@ -177,9 +177,8 @@ class Player(pygame.sprite.Sprite):
                 self.idle_count += 1
 
     def attack(self):
-        from main import mobs_group, ghost, slime, skeleton
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_e]:
+        from main import mobs_group
+        if self.keys[pygame.K_e]:
             self.at = True
         else:
             self.at = False
@@ -199,23 +198,13 @@ class Player(pygame.sprite.Sprite):
         hit_rect_right = pygame.Rect(self.rect.x + 25, self.rect.y, self.rect.width, self.rect.height)
         hit_rect_left = pygame.Rect(self.rect.x - 25, self.rect.y, self.rect.width, self.rect.height)
         for i in mobs_group.sprites():
-
             if hit_rect_right.colliderect(i.rect) or hit_rect_left.colliderect(i.rect):
                 if self.at and (self.at_count in range(11, 20)):
-                    if skeleton is not None:
-                        skeleton.get_damage(i)
-                        break
-                    elif ghost is not None:
-                        ghost.get_damage(i)
-                        break
-                    elif slime is not None:
-                        slime.get_damage(i)
-                        break
+                    i.kill()
 
     def jump(self):
         from main import roof_group
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and self.fall is False:
+        if self.keys[pygame.K_SPACE] and self.fall is False:
             self.jmp = True
             if self.jump_count + 1 > 15:
                 self.jump_count = 0
@@ -236,6 +225,11 @@ class Player(pygame.sprite.Sprite):
             self.bounce = 10
             self.jmp = False
             self.jump_count = 0
+
+    def draw_hp(self):
+        from main import screen
+        screen.blit(pygame.transform.chop(health, (0, 15, self.hp_bar, 15)), (48, 18))
+        screen.blit(pygame.transform.chop(stamina, (8, 15, (150 - self.stamina), 15)), (58, 33))
 
     def get_hp(self):
         if self.hp < 10:
