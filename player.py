@@ -53,6 +53,11 @@ health = pygame.transform.scale(pygame.image.load('data/gui/Health.png'), (150, 
 
 stamina = pygame.transform.scale(pygame.image.load('data/gui/stamina.png'), (136, 10))
 
+attack_sound = pygame.mixer.Sound('sounds/attack.ogg')
+jump_sound = pygame.mixer.Sound('sounds/jump.ogg')
+hurt_sound = pygame.mixer.Sound('sounds/hurt.ogg')
+kill_enemy_sound = pygame.mixer.Sound('sounds/kill.ogg')
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -168,6 +173,7 @@ class Player(pygame.sprite.Sprite):
     def attack(self):
         from main import mobs_group
         if self.keys[pygame.K_e]:
+
             self.at = True
         else:
             self.at = False
@@ -183,24 +189,31 @@ class Player(pygame.sprite.Sprite):
             self.at_count += 1
         else:
             self.at_count = 0
-
+        if self.at and self.at_count == 15:
+            pygame.mixer.Sound.play(attack_sound)
         hit_rect_right = pygame.Rect(self.rect.x + 25, self.rect.y, self.rect.width, self.rect.height)
         hit_rect_left = pygame.Rect(self.rect.x - 25, self.rect.y, self.rect.width, self.rect.height)
         for i in mobs_group.sprites():
             if hit_rect_right.colliderect(i.rect) or hit_rect_left.colliderect(i.rect):
                 if self.at and (self.at_count in range(11, 20)):
                     i.kill()
+                    pygame.mixer.Sound.play(kill_enemy_sound)
 
     def jump(self):
         from main import roof_group
+        if self.jump_count + 1 > 14:
+            self.jump_count = 1
+
         if self.keys[pygame.K_SPACE] and self.fall is False:
             self.jmp = True
-            if self.jump_count + 1 > 15:
-                self.jump_count = 0
+
             if self.bounce >= - 2:
                 if self.bounce < 0 or pygame.sprite.spritecollideany(self, roof_group) is not None:
+
                     self.jmp = False
                 else:
+                    if self.jump_count == 0:
+                        pygame.mixer.Sound.play(jump_sound)
                     if self.left is False:
                         self.image = jump[self.jump_count // 5]
                         self.rect = self.rect.move(0, -(self.bounce ** 2) / 8)
@@ -218,7 +231,7 @@ class Player(pygame.sprite.Sprite):
     def draw_hp(self):
         from main import screen
         screen.blit(pygame.transform.chop(health, (0, 15, self.hp_bar, 15)), (48, 18))
-        screen.blit(pygame.transform.chop(stamina, (8, 15, (self.stamina), 15)), (58, 33))
+        screen.blit(pygame.transform.chop(stamina, (8, 15, (150 - self.stamina), 15)), (58, 33))
 
     def get_hp(self):
         if self.hp < 10:
@@ -226,4 +239,5 @@ class Player(pygame.sprite.Sprite):
             self.hp_bar -= 30
 
     def get_damage(self):
+        pygame.mixer.Sound.play(hurt_sound)
         self.hrt = True

@@ -36,6 +36,8 @@ mesbox = pygame.image.load('data/gui/mesbox.png')
 
 levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx']
 
+pygame.mixer.music.load('sounds/main_loop.ogg')
+pygame.mixer.music.set_volume(0.2)
 hp = 10
 bg_pos = 0
 mg_pos = 0
@@ -141,6 +143,7 @@ def controls():
 
 
 def game_over():
+    pygame.mixer.music.stop()
     screen.fill((0, 0, 0))
     print_text('GAME OVER', 300, 105, font_type='shrift5.ttf', font_size=75)
     while True:
@@ -263,6 +266,7 @@ filename = menu()
 
 load_map(filename)
 
+pygame.mixer.music.play(-1)
 while True:
     clock.tick(fps)
 

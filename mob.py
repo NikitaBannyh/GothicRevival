@@ -50,6 +50,8 @@ death = [load_image(pygame.image.load('data/mobs/death/enemy-death-1.png')),
          load_image(pygame.image.load('data/mobs/death/enemy-death-5.png')),
          ]
 
+rise_sound = pygame.mixer.Sound('sounds/rise.ogg')
+
 
 class Ghost(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -236,8 +238,10 @@ class Skeleton(pygame.sprite.Sprite):
             self.idle_count = 0
 
         if player_group.sprites()[0].rect.colliderect(
-                pygame.Rect(self.rect.x - 200, self.rect.y - 200, self.rect.width + 200, self.rect.height + 200)):
+                pygame.Rect(self.rect.x - 200, self.rect.y - 200, self.rect.width + 200,
+                            self.rect.height + 200)) and self.visible is False:
             self.visible = True
+            pygame.mixer.Sound.play(rise_sound)
         from main import player_group, border_group_left, border_group_right
         if self.visible:
             if self.rise_count < 36:
