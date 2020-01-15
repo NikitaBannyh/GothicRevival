@@ -36,8 +36,13 @@ mesbox = pygame.image.load('data/gui/mesbox.png')
 
 levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx']
 
-pygame.mixer.music.load('sounds/main_loop.ogg')
-pygame.mixer.music.set_volume(0.2)
+scroll_sound = pygame.mixer.Sound('sounds/scroll_sound.ogg')
+game_music = pygame.mixer.Sound('sounds/main_loop.ogg')
+main_menu_music = pygame.mixer.Sound('sounds/main_menu_loop.ogg')
+pluck_sound = pygame.mixer.Sound('sounds/pluck.ogg')
+main_menu_music.set_volume(0.2)
+game_music.set_volume(0.2)
+
 hp = 10
 bg_pos = 0
 mg_pos = 0
@@ -50,6 +55,7 @@ def terminate():
 
 
 def start_screen():
+    main_menu_music.play(-1)
     global bg_pos, mg_pos
     while True:
         clock.tick(120)
@@ -98,13 +104,18 @@ def menu():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and pos <= 325:
+                pluck_sound.play()
                 pos += 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP and pos >= 225:
+                pluck_sound.play()
                 pos -= 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if pos == 185:
+                    main_menu_music.stop()
+                    game_music.play(-1)
                     return levels[0]
                 elif pos == 235:
+                    scroll_sound.play()
                     controls()
                 elif pos == 335:
                     terminate()
@@ -164,6 +175,7 @@ def print_text(message, x, y, font_color=(255, 250, 250), font_type='shrift4.ttf
 
 
 def paused():
+    game_music.stop()
     pos = 180
     while True:
         clock.tick(120)
@@ -181,9 +193,11 @@ def paused():
                 pos -= 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if pos == 230:
+                    main_menu_music.play(-1)
                     load_map(menu())
                     return
                 elif pos == 180:
+                    game_music.play(-1)
                     return
         pygame.display.flip()
 
@@ -266,7 +280,6 @@ filename = menu()
 
 load_map(filename)
 
-pygame.mixer.music.play(-1)
 while True:
     clock.tick(fps)
 
@@ -274,6 +287,7 @@ while True:
         if event.type == pygame.QUIT:
             terminate()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            scroll_sound.play()
             paused()
 
     all_sprites.update()
