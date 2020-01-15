@@ -40,6 +40,7 @@ scroll_sound = pygame.mixer.Sound('sounds/scroll_sound.ogg')
 game_music = pygame.mixer.Sound('sounds/main_loop.ogg')
 main_menu_music = pygame.mixer.Sound('sounds/main_menu_loop.ogg')
 pluck_sound = pygame.mixer.Sound('sounds/pluck.ogg')
+game_over_sound = pygame.mixer.Sound('sounds/game_over_sound.ogg')
 main_menu_music.set_volume(0.2)
 game_music.set_volume(0.2)
 
@@ -154,10 +155,17 @@ def controls():
 
 
 def game_over():
-    pygame.mixer.music.stop()
-    screen.fill((0, 0, 0))
-    print_text('GAME OVER', 300, 105, font_type='shrift5.ttf', font_size=75)
+    game_music.stop()
+    game_over_sound.play()
+    pos = 0
     while True:
+        screen.fill((0, 0, 0))
+        print_text('GAME OVER', 180, pos, font_type='shrift5.ttf', font_size=150, font_color=(155, 0, 0))
+        print_text('Tap to RESTART', 300, 300, font_type='shrift5.ttf')
+        print_text('Press Enter to main menu', 220, 350, font_type='shrift5.ttf')
+        if pos < 100:
+            pos += 1
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
