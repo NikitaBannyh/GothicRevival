@@ -77,6 +77,7 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                pluck_sound.play()
                 return
 
 
@@ -113,6 +114,7 @@ def menu():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if pos == 185:
                     main_menu_music.stop()
+                    pluck_sound.play()
                     game_music.play(-1)
                     return levels[0]
                 elif pos == 235:
@@ -149,6 +151,7 @@ def controls():
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN or (
                     event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                scroll_sound.play()
                 return
         pygame.display.flip()
         clock.tick(fps)
@@ -169,8 +172,11 @@ def game_over():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 load_map(menu())
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                load_map(levels[0])
                 return
         pygame.display.flip()
         clock.tick(fps)
@@ -196,8 +202,10 @@ def paused():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and pos <= 180:
+                pluck_sound.play()
                 pos += 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP and pos >= 230:
+                pluck_sound.play()
                 pos -= 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if pos == 230:
@@ -205,6 +213,7 @@ def paused():
                     load_map(menu())
                     return
                 elif pos == 180:
+                    scroll_sound.play()
                     game_music.play(-1)
                     return
         pygame.display.flip()
