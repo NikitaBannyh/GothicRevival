@@ -218,7 +218,7 @@ class Player(pygame.sprite.Sprite):
     def draw_hp(self):
         from main import screen
         screen.blit(pygame.transform.chop(health, (0, 15, self.hp_bar, 15)), (48, 18))
-        screen.blit(pygame.transform.chop(stamina, (8, 15, (150 - self.stamina), 15)), (58, 33))
+        screen.blit(pygame.transform.chop(stamina, (8, 15, (self.stamina), 15)), (58, 33))
 
     def get_hp(self):
         if self.hp < 10:

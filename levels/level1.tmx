@@ -283,7 +283,6 @@
   <object id="36" name="wall" x="362.069" y="207.002" width="18.0548" height="0.299955"/>
   <object id="37" name="wall" x="967.187" y="206.166" width="59.2318" height="0.299955"/>
   <object id="69" name="wall" x="587.637" y="207.451" width="38.9125" height="0.96769"/>
-  <object id="70" name="dead_line" x="32.3415" y="571.435" width="1547.19" height="7.20662"/>
  </objectgroup>
  <objectgroup id="6" name="border">
   <object id="5" name="border_left" x="0.687144" y="-2.74857" width="4.12286" height="235.785"/>
