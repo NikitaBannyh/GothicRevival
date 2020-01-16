@@ -3,6 +3,8 @@ import pygame
 potion = [pygame.transform.scale(pygame.image.load('data/gui/potions.png'), (30, 30)),
           pygame.transform.scale(pygame.image.load('data/gui/potions 2.png'), (30, 55))]
 
+potion_sound = pygame.mixer.Sound('sounds/potion_sound.ogg')
+
 
 class Potion(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -21,4 +23,5 @@ class Potion(pygame.sprite.Sprite):
             self.idle_count += 1
         if pygame.sprite.spritecollideany(self, player_group) is not None:
             player.get_hp()
+            potion_sound.play()
             self.kill()

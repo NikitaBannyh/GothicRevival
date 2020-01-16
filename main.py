@@ -173,6 +173,7 @@ def game_over():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                main_menu_music.play(-1)
                 load_map(menu())
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -284,14 +285,19 @@ def load_map(filename):
 
 
 player = None
+
 ghost = None
 slime = None
 skeleton = None
+
 map = None
 map_img = None
 map_rect = None
+
 cam = None
+
 load_map(levels[0])
+
 start_screen()
 filename = menu()
 
@@ -310,7 +316,6 @@ while True:
     all_sprites.update()
     cam.update(player)
     player_group.draw(screen)
-
     screen.blit(map_img, cam.apply_rect(map_rect))
     screen.blit(health_bar, (0, 0))
     screen.blit(stamina_bar, (47, 30))
