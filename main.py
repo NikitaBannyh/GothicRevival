@@ -173,10 +173,13 @@ def game_over():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                game_over_sound.stop()
                 main_menu_music.play(-1)
                 load_map(menu())
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                game_over_sound.stop()
+                game_music.play(-1)
                 load_map(levels[0])
                 return
         pygame.display.flip()

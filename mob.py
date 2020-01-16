@@ -66,7 +66,6 @@ class Ghost(pygame.sprite.Sprite):
         self.right = False
         self.visible = False
         self.count_move = 0
-        self.health = 10
 
     def update(self):
         from main import player_group, wall_group, stair_group, player, dead_line_group
@@ -141,7 +140,7 @@ class Slime(pygame.sprite.Sprite):
         self.right = False
         self.visible = False
         self.attack_count = 0
-        self.health = 10
+        self.health = 15
 
     def update(self):
         from main import player_group, wall_group, stair_group, player, dead_line_group
@@ -216,12 +215,11 @@ class Skeleton(pygame.sprite.Sprite):
         self.right = False
         self.visible = False
         self.rise_count = 0
-        self.health = 10
-        self.death_count = 0
 
     def update(self):
         from main import player_group, wall_group, stair_group, player, dead_line_group
-
+        if self.health <= 0:
+            self.kill()
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
 
@@ -263,9 +261,14 @@ class Skeleton(pygame.sprite.Sprite):
                     self.left = False
                     self.right = True
                 else:
-                    self.image = skeleton_walk[self.idle_count // 7]
-                    self.idle_count += 1
-                    self.right, self.left = False, False
+                    if player_group.sprites()[0].rect.x < self.rect.x:
+                        self.image = skeleton_walk[self.idle_count // 7]
+                        self.idle_count += 1
+                        self.right, self.left = False, False
+                    else:
+                        self.image = pygame.transform.flip(skeleton_walk[self.idle_count // 7], True, False)
+                        self.idle_count += 1
+                        self.right, self.left = False, False
 
         elif self.visible is False:
             self.image = skeleton_rise[0]
