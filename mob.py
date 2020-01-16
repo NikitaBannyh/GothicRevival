@@ -218,8 +218,6 @@ class Skeleton(pygame.sprite.Sprite):
 
     def update(self):
         from main import player_group, wall_group, stair_group, player, dead_line_group
-        if self.health <= 0:
-            self.kill()
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
 
