@@ -68,7 +68,9 @@ class Ghost(pygame.sprite.Sprite):
         self.count_move = 0
 
     def update(self):
-        from main import player_group, wall_group, stair_group, player, dead_line_group
+        from main import player_group, wall_group, stair_group, player, dead_line_group, border_group_left, \
+            border_group_right
+
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
 
@@ -86,9 +88,10 @@ class Ghost(pygame.sprite.Sprite):
             self.idle_count = 0
 
         if player_group.sprites()[0].rect.colliderect(
-                pygame.Rect(self.rect.x - 200, self.rect.y - 200, self.rect.width + 200, self.rect.height + 200)):
+                pygame.Rect(self.rect.x - 200, self.rect.y - 200, self.rect.width + 200,
+                            self.rect.height + 200)) and self.visible is False:
             self.visible = True
-        from main import player_group, border_group_left, border_group_right
+
         if self.visible:
             if player_group.sprites()[0].rect.x < self.rect.x and pygame.sprite.spritecollideany(self,
                                                                                                  border_group_left) is None:
@@ -101,31 +104,38 @@ class Ghost(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(idle_ghost[self.idle_count // 7], True, False)
                 self.idle_count += 1
             else:
-                self.image = idle_ghost[self.idle_count // 7]
-                self.idle_count += 1
+                if player_group.sprites()[0].rect.x < self.rect.x:
+                    self.image = idle_ghost[self.idle_count // 7]
+                    self.idle_count += 1
+                else:
+                    self.image = pygame.transform.flip(idle_ghost[self.idle_count // 7], True, False)
+                    self.idle_count += 1
 
         if self.visible is False:
             if self.left:
-                if self.count_move != 55 and pygame.sprite.spritecollideany(self, border_group_left) is None:
+                if self.count_move != 55:
                     self.count_move += 1
-                    self.rect = self.rect.move(-1, 0)
+                    if pygame.sprite.spritecollideany(self, border_group_right) is None:
+                        self.rect = self.rect.move(-1, 0)
                     self.image = idle_ghost[self.idle_count // 7]
                     self.idle_count += 1
                 else:
                     self.left = False
                     self.right = True
             elif self.right:
-                if self.count_move != 0 and pygame.sprite.spritecollideany(self, border_group_right) is None:
+                if self.count_move != 0:
                     self.count_move -= 1
-                    self.rect = self.rect.move(1, 0)
+                    if pygame.sprite.spritecollideany(self, border_group_right) is None:
+                        self.rect = self.rect.move(1, 0)
                     self.image = pygame.transform.flip(idle_ghost[self.idle_count // 7], True, False)
                     self.idle_count += 1
                 else:
                     self.left = True
                     self.right = False
 
-        if pygame.sprite.collide_mask(self, player_group.sprites()[0]):
-            player.get_damage()
+        if pygame.sprite.collide_mask(self, player_group.sprites()[0]) and self.idle_count == 15:
+            player.get_damage(1)
+            self.idle_count = 0
 
 
 class Slime(pygame.sprite.Sprite):
@@ -199,7 +209,7 @@ class Slime(pygame.sprite.Sprite):
 
             self.attack_count += 1
             if self.attack_count in range(26, 32):
-                player.get_damage()
+                player.get_damage(1)
                 self.attack_count = 0
 
 
@@ -270,6 +280,6 @@ class Skeleton(pygame.sprite.Sprite):
 
         elif self.visible is False:
             self.image = skeleton_rise[0]
-        if pygame.sprite.collide_mask(self, player_group.sprites()[0]) and self.idle_count in range(28, 35):
-            player.get_damage()
+        if pygame.sprite.collide_mask(self, player_group.sprites()[0]) and self.idle_count == 28:
+            player.get_damage(1)
             self.idle_count = 0

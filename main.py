@@ -34,7 +34,7 @@ scroll = pygame.transform.scale(pygame.image.load('data/gui/scroll.png'), (350, 
 conrols_image = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/cntrls.png'), (width, height))
 mesbox = pygame.image.load('data/gui/mesbox.png')
 
-levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx']
+levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx','levels/level4.tmx']
 
 scroll_sound = pygame.mixer.Sound('sounds/scroll_sound.ogg')
 game_music = pygame.mixer.Sound('sounds/main_loop.ogg')
@@ -325,6 +325,12 @@ while True:
     for sprite in all_sprites:
         screen.blit(sprite.image, cam.apply(sprite))
     player.draw_hp()
-    if pygame.sprite.spritecollideany(player, end_level_group) is not None:
+    if pygame.sprite.spritecollideany(player, end_level_group) is not None and len(mobs_group.sprites()) == 0:
         end_level()
+    elif pygame.sprite.spritecollideany(player, end_level_group) is not None:
+        screen.blit(mesbox,(300,100))
+        print_text('You need to kill all', 350, 115, (255, 255, 255),
+                   'shrift5.ttf', 25)
+        print_text('enemies to continue', 350, 145, (255, 255, 255),
+                   'shrift5.ttf', 25)
     pygame.display.flip()

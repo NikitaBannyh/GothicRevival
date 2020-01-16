@@ -84,11 +84,10 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         from main import wall_group, game_over, dead_line_group, stair_group
-
-        self.keys = pygame.key.get_pressed()
-        self.move()
-        self.attack()
-        self.jump()
+        keys = pygame.key.get_pressed()
+        self.move(keys)
+        self.attack(keys)
+        self.jump(keys)
 
         if self.hp <= 0 or pygame.sprite.spritecollideany(self, dead_line_group) is not None:
             game_over()
@@ -108,18 +107,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.fall = False
 
-        if self.hrt and self.jmp is False and self.fall is False:
-            self.hp -= 1
-            self.hp_bar += 15
-            self.hrt = False
 
-    def move(self):
+
+    def move(self,keys):
         from main import border_group_left, border_group_right
 
-        if self.keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
+        if keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
                                                                     border_group_left) is None and self.hrt is False:
 
-            if self.keys[pygame.K_LSHIFT] and self.stamina > 0:
+            if keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
                 self.rect = self.rect.move(-self.speed - 2, 0)
             else:
@@ -130,10 +126,10 @@ class Player(pygame.sprite.Sprite):
             self.right = False
             self.side = 1
 
-        elif self.keys[pygame.K_d] and pygame.sprite.spritecollideany(self,
+        elif keys[pygame.K_d] and pygame.sprite.spritecollideany(self,
                                                                       border_group_right) is None and self.hrt is False:
 
-            if self.keys[pygame.K_LSHIFT] and self.stamina > 0:
+            if keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
                 self.rect = self.rect.move(self.speed + 2, 0)
             else:
@@ -170,9 +166,9 @@ class Player(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(idle[self.idle_count // 7], True, False)
                 self.idle_count += 1
 
-    def attack(self):
+    def attack(self,keys):
         from main import mobs_group
-        if self.keys[pygame.K_e]:
+        if keys[pygame.K_e]:
 
             self.at = True
         else:
@@ -199,12 +195,12 @@ class Player(pygame.sprite.Sprite):
                     i.kill()
                     pygame.mixer.Sound.play(kill_enemy_sound)
 
-    def jump(self):
+    def jump(self,keys):
         from main import roof_group
         if self.jump_count + 1 > 14:
             self.jump_count = 1
 
-        if self.keys[pygame.K_SPACE] and self.fall is False:
+        if keys[pygame.K_SPACE] and self.fall is False:
             self.jmp = True
 
             if self.bounce >= - 2:
@@ -238,6 +234,10 @@ class Player(pygame.sprite.Sprite):
             self.hp += 2
             self.hp_bar -= 30
 
-    def get_damage(self):
+    def get_damage(self,damage):
         pygame.mixer.Sound.play(hurt_sound)
-        self.hrt = True
+        if self.jmp is False and self.fall is False:
+            self.hp -= damage
+            self.hp_bar += damage * 15
+
+

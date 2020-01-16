@@ -309,6 +309,5 @@
   <object id="64" name="skeleton" x="1095.48" y="159.443" width="21.8594" height="21.4133"/>
   <object id="66" name="skeleton" x="1285.61" y="148.248" width="21.8594" height="21.4133"/>
   <object id="67" name="skeleton" x="596.833" y="157.807" width="21.8594" height="21.4133"/>
-  <object id="71" name="potion" x="159.784" y="199.287" width="14.7681" height="14.2759"/>
  </objectgroup>
 </map>
