@@ -143,11 +143,11 @@ def controls():
         bg_pos += 3
         mg_pos += 1
         screen.blit(scroll, (280, 50))
-        print_text(' Controls', 355, 90, font_type='shrift4.ttf', font_size=75, font_color=(155, 0, 0))
-        print_text('Move: A and D', 355, 180, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
-        print_text('Jump:  SPACE', 355, 230, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
-        print_text('Attack:   E', 355, 280, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
-        print_text('Run:  SHIFT', 355, 330, font_type='shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text(' Controls', 355, 90, font_type='shrifts/shrift4.ttf', font_size=75, font_color=(155, 0, 0))
+        print_text('Move: A and D', 355, 180, font_type='shrifts/shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Jump:  SPACE', 355, 230, font_type='shrifts/shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Attack:   E', 355, 280, font_type='shrifts/shrift4.ttf', font_size=50, font_color=(54, 37, 80))
+        print_text('Run:  SHIFT', 355, 330, font_type='shrifts/shrift4.ttf', font_size=50, font_color=(54, 37, 80))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -165,9 +165,9 @@ def game_over():
     pos = 0
     while True:
         screen.fill((0, 0, 0))
-        print_text('GAME OVER', 180, pos, font_type='shrift5.ttf', font_size=150, font_color=(155, 0, 0))
-        print_text('Tap to RESTART', 300, 300, font_type='shrift5.ttf')
-        print_text('Press Enter to main menu', 220, 350, font_type='shrift5.ttf')
+        print_text('GAME OVER', 180, pos, font_type='shrifts/shrift5.ttf', font_size=150, font_color=(155, 0, 0))
+        print_text('Tap to RESTART', 300, 300, font_type='shrifts/shrift5.ttf')
+        print_text('Press Enter to main menu', 220, 350, font_type='shrifts/shrift5.ttf')
         if pos < 100:
             pos += 1
 
@@ -188,7 +188,7 @@ def game_over():
         clock.tick(fps)
 
 
-def print_text(message, x, y, font_color=(255, 250, 250), font_type='shrift4.ttf', font_size=50):
+def print_text(message, x, y, font_color=(255, 250, 250), font_type='shrifts/shrift4.ttf', font_size=50):
     font_type = pygame.font.Font(font_type, font_size)
     text = font_type.render(message, True, font_color)
     screen.blit(text, (x, y))
