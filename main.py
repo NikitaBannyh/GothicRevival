@@ -7,6 +7,7 @@ size = width, height = 920, 480
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
+# создаём группы спрайтов
 all_sprites = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 mobs_group = pygame.sprite.Group()
@@ -19,6 +20,7 @@ stair_group = pygame.sprite.Group()
 end_level_group = pygame.sprite.Group()
 potion_group = pygame.sprite.Group()
 
+# загружаем картинки и аудио
 player_image = pygame.image.load('data/character/idle1.png')
 enter = pygame.image.load('data/backgrounds and titles/press-enter-text.png')
 title = pygame.image.load("data/backgrounds and titles/title.png")
@@ -58,6 +60,7 @@ def terminate():
     sys.exit()
 
 
+#  начальный экран
 def start_screen():
     main_menu_music.play(-1)
     global bg_pos, mg_pos
@@ -84,6 +87,7 @@ def start_screen():
                 return
 
 
+# главное меню
 def menu():
     global fon, title, sword, bg_pos, mg_pos
     pos = 185
@@ -128,6 +132,7 @@ def menu():
         pygame.display.flip()
 
 
+# управление
 def controls():
     global bg_pos, mg_pos
     while True:
@@ -188,12 +193,14 @@ def game_over():
         clock.tick(fps)
 
 
+# функция для написания текста на экране
 def print_text(message, x, y, font_color=(255, 250, 250), font_type='shrifts/shrift4.ttf', font_size=50):
     font_type = pygame.font.Font(font_type, font_size)
     text = font_type.render(message, True, font_color)
     screen.blit(text, (x, y))
 
 
+# пауза
 def paused():
     game_music.stop()
     pos = 180
@@ -225,6 +232,7 @@ def paused():
         pygame.display.flip()
 
 
+# конец уровня и переход на следующий
 def end_level():
     global level
     level += 1
@@ -232,6 +240,7 @@ def end_level():
     load_map(levels[level])
 
 
+# функция загрузки уровня
 def load_map(filename):
     global map, map_img, map_rect, player, ghost, cam, slime, skeleton
     from cam import Camera
@@ -239,6 +248,7 @@ def load_map(filename):
     from tiles import TiledMap, Obstacle
     from mob import Ghost, Slime, Skeleton
     from potions import Potion
+    # очищаем все группы спрайтов
     all_sprites.empty()
     player_group.empty()
     mobs_group.empty()
@@ -250,11 +260,14 @@ def load_map(filename):
     stair_group.empty()
     end_level_group.empty()
 
+    # создаем карту
     map = TiledMap(filename)
     map_img = map.make_map()
     map_rect = map_img.get_rect()
 
+    # создаём камеру
     cam = Camera(map.width, map.height)
+    # циклом проходимся по всем обьектам созданным в графическом редакторе и создаем из них спрайты для будущей колизии
     for tile_object in map.tmxdata.objects:
         if tile_object.name == 'wall':
             Obstacle(tile_object.x, tile_object.y,
@@ -308,6 +321,7 @@ filename = menu()
 
 load_map(filename)
 
+# главный игровой цикл
 while True:
     clock.tick(fps)
 

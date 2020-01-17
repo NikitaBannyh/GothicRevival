@@ -21,6 +21,7 @@ class Camera:
         self.x = -target.rect.centerx + int(width / 2)
         self.y = -target.rect.centery + int(height / 2)
 
+        # делаем ограничение камере чтобы она не выходила за пределы карты
         self.x = min(0, self.x)
         self.y = min(0, self.y)
         self.x = max(-(self.width - width), self.x)

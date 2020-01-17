@@ -2,6 +2,7 @@ import pygame
 
 from player import load_image
 
+# загружаем картинки и аудио
 idle_ghost = [load_image(pygame.image.load('data/mobs/ghost/ghost-idle1.png')),
               load_image(pygame.image.load('data/mobs/ghost/ghost-idle2.png')),
               load_image(pygame.image.load('data/mobs/ghost/ghost-idle3.png')),
@@ -73,11 +74,9 @@ class Ghost(pygame.sprite.Sprite):
 
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
+        """если моб не соприкосается с землёй,то он падает"""
 
-        if pygame.sprite.spritecollideany(self, wall_group) is None and pygame.sprite.spritecollideany(self,
-                                                                                                       stair_group) is not None:
-            self.rect = self.rect.move(0, 6)
-        elif pygame.sprite.spritecollideany(self, wall_group) is None and self.left is False:
+        if pygame.sprite.spritecollideany(self, wall_group) is None and self.left is False:
             self.rect = self.rect.move(0, 6)
 
         elif pygame.sprite.spritecollideany(self, wall_group) is None and self.left is True:
@@ -93,6 +92,7 @@ class Ghost(pygame.sprite.Sprite):
             self.visible = True
 
         if self.visible:
+            #  если моб  видит персонажа,то он следует за ним
             if player_group.sprites()[0].rect.x < self.rect.x and pygame.sprite.spritecollideany(self,
                                                                                                  border_group_left) is None:
                 self.rect = self.rect.move(-1, 0)
@@ -112,6 +112,7 @@ class Ghost(pygame.sprite.Sprite):
                     self.idle_count += 1
 
         if self.visible is False:
+            #  если моб не видит персонажа,то он перемещается вправо и влево
             if self.left:
                 if self.count_move != 55:
                     self.count_move += 1
@@ -132,7 +133,7 @@ class Ghost(pygame.sprite.Sprite):
                 else:
                     self.left = True
                     self.right = False
-
+        #  если моб соприкосается с персонажем то наносит урон
         if pygame.sprite.collide_mask(self, player_group.sprites()[0]) and self.idle_count == 15:
             player.get_damage(1)
             self.idle_count = 0
@@ -153,6 +154,8 @@ class Slime(pygame.sprite.Sprite):
         self.health = 15
 
     def update(self):
+        # тоже самое как и с первым мобом только если этот моб не видит персонажа то он стоит на месте
+        # и добавлена анимация атаки
         from main import player_group, wall_group, stair_group, player, dead_line_group
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()
@@ -227,6 +230,8 @@ class Skeleton(pygame.sprite.Sprite):
         self.rise_count = 0
 
     def update(self):
+        # тоже самое как и с прошлыми мобами только при обнаруживание персонажа сначала происходит анимация
+        # вылезание из под земли
         from main import player_group, wall_group, stair_group, player, dead_line_group
         if pygame.sprite.spritecollideany(self, dead_line_group):
             self.kill()

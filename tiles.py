@@ -4,6 +4,7 @@ import pytmx
 
 class TiledMap:
     def __init__(self, filename):
+        # создаем размеры карты
         tm = pytmx.load_pygame(filename, pixelalpha=True)
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
@@ -11,6 +12,7 @@ class TiledMap:
 
     def render(self, surface):
         ti = self.tmxdata.get_tile_image_by_gid
+        # проходимся циклом по каждому слою тайлов и рисуем их
         for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid, in layer:
@@ -28,6 +30,7 @@ class TiledMap:
 
 
 class Obstacle(pygame.sprite.Sprite):
+    # создаем спрайты для будующей коллизии
     def __init__(self, x, y, w, h, group):
         pygame.sprite.Sprite.__init__(self, group)
         self.rect = pygame.Rect(x, y, w, h)

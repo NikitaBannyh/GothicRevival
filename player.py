@@ -1,10 +1,12 @@
 import pygame
 
 
+# картинки быди маленькими и я решил увеличить их в 1,3 раза
 def load_image(image):
     return pygame.transform.scale(image, (int(image.get_rect().width * 1.3), int(image.get_rect().height * 1.3)))
 
 
+# загружаем картинки и аудио
 run = [load_image(pygame.image.load('data/character/left1.png')),
        load_image(pygame.image.load('data/character/left2.png')),
        load_image(pygame.image.load('data/character/left3.png')),
@@ -61,6 +63,7 @@ kill_enemy_sound = pygame.mixer.Sound('sounds/kill.ogg')
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
+        # создание персонажа
         from main import player_group, all_sprites, player_image, hp
         super().__init__(player_group, all_sprites)
         self.image = load_image(player_image)
@@ -92,6 +95,7 @@ class Player(pygame.sprite.Sprite):
         if self.hp <= 0 or pygame.sprite.spritecollideany(self, dead_line_group) is not None:
             game_over()
 
+        """если персонаж не соприкосается с землёй,то он падает"""
         if pygame.sprite.spritecollideany(self, wall_group) is None and pygame.sprite.spritecollideany(self,
                                                                                                        stair_group) is not None and self.jmp is False:
             self.rect = self.rect.move(0, 6)
@@ -108,6 +112,7 @@ class Player(pygame.sprite.Sprite):
             self.fall = False
 
     def move(self, keys):
+        # передвижение персонажа и анимация движения
         from main import border_group_left, border_group_right
 
         if keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
@@ -165,6 +170,7 @@ class Player(pygame.sprite.Sprite):
                 self.idle_count += 1
 
     def attack(self, keys):
+        # атака и анамация атаки
         from main import mobs_group
         if keys[pygame.K_e]:
 
@@ -194,6 +200,7 @@ class Player(pygame.sprite.Sprite):
                     pygame.mixer.Sound.play(kill_enemy_sound)
 
     def jump(self, keys):
+        # прыжок и анимация прыжка
         from main import roof_group
         if self.jump_count + 1 > 14:
             self.jump_count = 1
@@ -223,16 +230,19 @@ class Player(pygame.sprite.Sprite):
             self.jump_count = 0
 
     def draw_hp(self):
+        # рисуем здоровье и выносливость
         from main import screen
         screen.blit(pygame.transform.chop(health, (0, 15, self.hp_bar, 15)), (48, 18))
         screen.blit(pygame.transform.chop(stamina, (8, 15, (150 - self.stamina), 15)), (58, 33))
 
     def get_hp(self):
+        # персонаж получает здоровье(подбирает зелье)
         if self.hp < 10:
             self.hp += 2
             self.hp_bar -= 30
 
     def get_damage(self, damage):
+        # персонаж получает урон от вагов
         pygame.mixer.Sound.play(hurt_sound)
         if self.jmp is False and self.fall is False:
             self.hp -= damage
