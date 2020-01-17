@@ -63,16 +63,16 @@ def start_screen():
     global bg_pos, mg_pos
     while True:
         clock.tick(120)
-        if bg_pos >= 900:
+        if bg_pos >= 920:
             bg_pos = 0
-        elif mg_pos >= 900:
+        elif mg_pos >= 920:
             mg_pos = 0
         screen.blit(fon, (bg_pos, 0))
         screen.blit(fon, (-width + bg_pos, 0))
         screen.blit(middle_ground, (mg_pos, 0))
         screen.blit(middle_ground, (-width + mg_pos, 0))
         bg_pos += 3
-        mg_pos += 1
+        mg_pos += 2
         screen.blit(pygame.transform.scale(title, (710, 100)), (115, 100))
         screen.blit(pygame.transform.scale(enter, (150, 30)), (350, 300))
         pygame.display.flip()
