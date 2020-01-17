@@ -107,13 +107,11 @@ class Player(pygame.sprite.Sprite):
         else:
             self.fall = False
 
-
-
-    def move(self,keys):
+    def move(self, keys):
         from main import border_group_left, border_group_right
 
         if keys[pygame.K_a] and pygame.sprite.spritecollideany(self,
-                                                                    border_group_left) is None and self.hrt is False:
+                                                               border_group_left) is None and self.hrt is False:
 
             if keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
@@ -127,7 +125,7 @@ class Player(pygame.sprite.Sprite):
             self.side = 1
 
         elif keys[pygame.K_d] and pygame.sprite.spritecollideany(self,
-                                                                      border_group_right) is None and self.hrt is False:
+                                                                 border_group_right) is None and self.hrt is False:
 
             if keys[pygame.K_LSHIFT] and self.stamina > 0:
                 self.stamina -= 1
@@ -166,7 +164,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(idle[self.idle_count // 7], True, False)
                 self.idle_count += 1
 
-    def attack(self,keys):
+    def attack(self, keys):
         from main import mobs_group
         if keys[pygame.K_e]:
 
@@ -195,7 +193,7 @@ class Player(pygame.sprite.Sprite):
                     i.kill()
                     pygame.mixer.Sound.play(kill_enemy_sound)
 
-    def jump(self,keys):
+    def jump(self, keys):
         from main import roof_group
         if self.jump_count + 1 > 14:
             self.jump_count = 1
@@ -234,10 +232,8 @@ class Player(pygame.sprite.Sprite):
             self.hp += 2
             self.hp_bar -= 30
 
-    def get_damage(self,damage):
+    def get_damage(self, damage):
         pygame.mixer.Sound.play(hurt_sound)
         if self.jmp is False and self.fall is False:
             self.hp -= damage
             self.hp_bar += damage * 15
-
-

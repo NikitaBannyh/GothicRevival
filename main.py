@@ -1,4 +1,4 @@
-import pygame, sys, os
+import pygame, sys
 
 pygame.init()
 
@@ -34,7 +34,7 @@ scroll = pygame.transform.scale(pygame.image.load('data/gui/scroll.png'), (350, 
 conrols_image = pygame.transform.scale(pygame.image.load('data/backgrounds and titles/cntrls.png'), (width, height))
 mesbox = pygame.image.load('data/gui/mesbox.png')
 
-levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx','levels/level4.tmx']
+levels = ['levels/level1.tmx', 'levels/level2.tmx', 'levels/level3.tmx', 'levels/level4.tmx']
 
 scroll_sound = pygame.mixer.Sound('sounds/scroll_sound.ogg')
 game_music = pygame.mixer.Sound('sounds/main_loop.ogg')
@@ -43,6 +43,9 @@ pluck_sound = pygame.mixer.Sound('sounds/pluck.ogg')
 game_over_sound = pygame.mixer.Sound('sounds/game_over_sound.ogg')
 main_menu_music.set_volume(0.2)
 game_music.set_volume(0.2)
+
+pygame.display.set_icon(pygame.transform.rotate(sword, 45))
+pygame.display.set_caption('GothicRevival')
 
 hp = 10
 bg_pos = 0
@@ -100,12 +103,11 @@ def menu():
         screen.blit(sword, (310, pos))
         print_text('Start game', 360, 175)
         print_text(' Controls', 360, 225)
-        print_text(' Settings', 360, 275)
-        print_text('   Exit', 360, 325)
+        print_text('   Exit', 360, 275)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and pos <= 325:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and pos <= 275:
                 pluck_sound.play()
                 pos += 50
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP and pos >= 225:
@@ -120,7 +122,7 @@ def menu():
                 elif pos == 235:
                     scroll_sound.play()
                     controls()
-                elif pos == 335:
+                elif pos == 285:
                     terminate()
 
         pygame.display.flip()
@@ -328,7 +330,7 @@ while True:
     if pygame.sprite.spritecollideany(player, end_level_group) is not None and len(mobs_group.sprites()) == 0:
         end_level()
     elif pygame.sprite.spritecollideany(player, end_level_group) is not None:
-        screen.blit(mesbox,(300,100))
+        screen.blit(mesbox, (300, 100))
         print_text('You need to kill all', 350, 115, (255, 255, 255),
                    'shrift5.ttf', 25)
         print_text('enemies to continue', 350, 145, (255, 255, 255),
