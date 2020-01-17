@@ -346,7 +346,7 @@ while True:
     elif pygame.sprite.spritecollideany(player, end_level_group) is not None:
         screen.blit(mesbox, (300, 100))
         print_text('You need to kill all', 350, 115, (255, 255, 255),
-                   'shrift5.ttf', 25)
+                   'shrifts/shrift5.ttf', 25)
         print_text('enemies to continue', 350, 145, (255, 255, 255),
-                   'shrift5.ttf', 25)
+                   'shrifts/shrift5.ttf', 25)
     pygame.display.flip()
