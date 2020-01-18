@@ -66,9 +66,9 @@ def start_screen():
     global bg_pos, mg_pos
     while True:
         clock.tick(120)
-        if bg_pos >= 920:
+        if bg_pos >= width:
             bg_pos = 0
-        elif mg_pos >= 920:
+        elif mg_pos >= width:
             mg_pos = 0
         screen.blit(fon, (bg_pos, 0))
         screen.blit(fon, (-width + bg_pos, 0))
@@ -93,16 +93,16 @@ def menu():
     pos = 185
     while True:
         clock.tick(120)
-        if bg_pos == 900:
+        if bg_pos == width:
             bg_pos = 0
-        elif mg_pos == 900:
+        elif mg_pos == width:
             mg_pos = 0
         screen.blit(fon, (bg_pos, 0))
         screen.blit(fon, (-width + bg_pos, 0))
         screen.blit(middle_ground, (mg_pos, 0))
         screen.blit(middle_ground, (-width + mg_pos, 0))
         bg_pos += 3
-        mg_pos += 1
+        mg_pos += 2
         screen.blit(title, (175, 75))
         screen.blit(sword, (310, pos))
         print_text('Start game', 360, 175)
