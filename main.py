@@ -93,9 +93,9 @@ def menu():
     pos = 185
     while True:
         clock.tick(120)
-        if bg_pos == width:
+        if bg_pos >= width:
             bg_pos = 0
-        elif mg_pos == width:
+        elif mg_pos >= width:
             mg_pos = 0
         screen.blit(fon, (bg_pos, 0))
         screen.blit(fon, (-width + bg_pos, 0))
